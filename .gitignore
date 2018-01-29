@@ -286,3 +286,11 @@ __pycache__/
 *.btm.cs
 *.odx.cs
 *.xsd.cs
+/clogging/clogging.sln
+/clogging/clogging/clogging.vcxproj
+/clogging/clogging/clogging.cpp
+/clogging/clogging/stdafx.cpp
+/clogging/clogging/stdafx.h
+/clogging/clogging/targetver.h
+/clogging/clogging/test_log.txt
+/clogging/clogging/clogging.vcxproj.filters
