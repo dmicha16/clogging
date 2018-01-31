@@ -11,6 +11,7 @@
 #include <sstream>
 #include <iomanip>
 
+#include "Macros.h"
 
 using namespace std;
 
@@ -22,17 +23,16 @@ namespace clogging {
 		const char *global_file_name_;
 
 	public:		
-		bool CreateLogFile(string global_file_name_);						
-		//void Clog(const char *level, void* output_msg, const char *specify_type);
+		bool CreateLogFile();								
 
 		template <typename T>
 		void Clog(T output_msg, string level, int specify_type);
 
-		template <typename T>
+		/*template <typename T>
 		void Clog(T output_msg, string level);
 
 		template <typename T>
-		void Clog(T output_msg);
+		void Clog(T output_msg);*/
 		
 		bool TXTSyntax(string level, string output_msg);				
 		bool JSONSyntax(string level, string output_msg);
