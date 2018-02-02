@@ -25,14 +25,13 @@ namespace clogging {
 	public:		
 		bool CreateLogFile();								
 
-		template <typename T>
-		void Clog(T output_msg, string level, int specify_type);
-
-		/*template <typename T>
-		void Clog(T output_msg, string level);
-
-		template <typename T>
-		void Clog(T output_msg);*/
+		
+		void Clog(int output_msg, string level, int specify_type);
+		void Clog(string output_msg, string level, int specify_type);
+		void Clog(double output_msg, string level, int specify_type);
+		void Clog(float output_msg, string level, int specify_type);
+		void Clog(char *output_msg, string level, int specify_type);
+		void Clog(wchar_t *output_msg, string level, int specify_type);		
 		
 		bool TXTSyntax(string level, string output_msg);				
 		bool JSONSyntax(string level, string output_msg);

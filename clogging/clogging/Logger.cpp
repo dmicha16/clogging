@@ -22,21 +22,20 @@ namespace clogging {
 		log_file.close();
 		return false;
 	}
-
-	template <typename T>
-	void Logger::Clog(T output_msg, string level, int specify_type) {
+	
+	void Logger::Clog(int output_msg, string level, int specify_type) {
 		
-		string output_to_string = output_msg;
+		string output_to_string = to_string(output_msg);
 
 		switch (specify_type) {
 			case 1:
-				bool TXTSyntax(level, output_to_string);
+				TXTSyntax(level, output_to_string);
 				break;
 			case 2:
-				bool JSONSyntax(level, output_to_string);
+				JSONSyntax(level, output_to_string);
 				break;			
 			default:
-				bool TXTSyntax(level, output_to_string);
+				TXTSyntax(level, output_to_string);
 				break;
 		}
 	}	
