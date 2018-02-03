@@ -23,16 +23,8 @@ namespace clogging {
 		const char *global_file_name_;
 
 	public:		
-		bool CreateLogFile();								
-
-		
-		void Clog(int output_msg, string level, int specify_type);
-		void Clog(string output_msg, string level, int specify_type);
-		void Clog(double output_msg, string level, int specify_type);
-		void Clog(float output_msg, string level, int specify_type);
-		void Clog(char *output_msg, string level, int specify_type);
-		void Clog(wchar_t *output_msg, string level, int specify_type);		
-		
+		bool CreateLogFile();
+		void Clog(string output_msg, string level, int specify_type);		
 		bool TXTSyntax(string level, string output_msg);				
 		bool JSONSyntax(string level, string output_msg);
 
