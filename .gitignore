@@ -288,8 +288,4 @@ __pycache__/
 *.xsd.cs
 
 /clogging/clogging/clogging.cpp
-/clogging/clogging/stdafx.cpp
-/clogging/clogging/stdafx.h
-/clogging/clogging/targetver.h
 /clogging/clogging/test_log.txt
-/clogging/clogging/clogging.vcxproj.filters
