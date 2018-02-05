@@ -287,5 +287,4 @@ __pycache__/
 *.odx.cs
 *.xsd.cs
 
-/clogging/clogging/clogging.cpp
 /clogging/clogging/test_log.txt
