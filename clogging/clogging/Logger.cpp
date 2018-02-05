@@ -9,7 +9,7 @@ namespace clogging {
 		CreateLogFile();
 	}	
 	
-	bool Logger::CreateLogFile() {		
+	bool Logger::CreateLogFile() {
 
 		ifstream log_file(GLOBAL_LOG_NAME);
 
@@ -36,7 +36,20 @@ namespace clogging {
 				TXTSyntax(level, output_msg);
 				break;
 		}
-	}	
+	}
+
+	void Logger::Clog(string output_msg, string level) {
+		
+		TXTSyntax(level, output_msg);
+	}
+
+	void Logger::Clog(string output_msg) {
+
+		string level = DEBUG;
+
+		TXTSyntax(level, output_msg);
+	}
+
 	
 	bool Logger::TXTSyntax(string level, string output_msg) {
 
@@ -54,6 +67,28 @@ namespace clogging {
 
 		if (log_file_out.is_open()) {							
 			
+			log_file_out << "[" << current_time << "] [" << level << "] " << output_msg << "\n";
+			log_file_out.close();
+			return true;
+		}
+	}
+
+	bool Logger::JSONSyntax(string level, string output_msg) {
+
+		char *current_time = CurrentTimeStamp();
+
+		ifstream log_file(GLOBAL_LOG_NAME);
+
+		if (!log_file) {
+			CreateLogFile();
+		}
+
+		log_file.close();		
+
+		ofstream log_file_out(GLOBAL_LOG_NAME, ofstream::app);
+
+		if (log_file_out.is_open()) {
+
 			log_file_out << "[" << current_time << "] [" << level << "] " << output_msg << "\n";
 			log_file_out.close();
 			return true;
