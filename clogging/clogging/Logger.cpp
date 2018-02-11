@@ -4,24 +4,37 @@
 
 namespace clogging {
 
-	Logger::Logger() {
+	Logger::Logger() {		
 		
-		CreateLogFile();
 	}	
 	
-	bool Logger::CreateLogFile() {
+	void Logger::AddFile(string file_name) {
 
-		ifstream log_file(GLOBAL_LOG_NAME);
+		global_file_name_ = file_name;
+
+		ifstream log_file(file_name);
 
 		if (!log_file) {			
 			ofstream log_file_create;
-			log_file_create.open(GLOBAL_LOG_NAME);
+			log_file_create.open(file_name);
+			log_file_create.close();			
+		}
+		log_file.close();		
+	}
+
+	/*void Logger::AddFile(string file_name, string path) {
+
+		global_file_name_ = file_name;
+
+		ifstream log_file(file_name);
+
+		if (!log_file) {
+			ofstream log_file_create(path);
+			log_file_create.open(file_name);
 			log_file_create.close();
-			return true;
 		}
 		log_file.close();
-		return false;
-	}
+	}*/
 	
 	void Logger::Clog(string output_msg, string level, int specify_type) {		
 		
@@ -49,20 +62,23 @@ namespace clogging {
 
 		TXTSyntax(level, output_msg);
 	}
+
+	void Logger::Clog() {
+
+		string level = INFO;
+		string output_msg = "Default placeholder message.";
+
+		TXTSyntax(level, output_msg);
+	}
 	
 	bool Logger::TXTSyntax(string level, string output_msg) {
 
 		char *current_time = CurrentTimeStamp();		
 
-		ifstream log_file(GLOBAL_LOG_NAME);
-
-		if (!log_file) {			
-			CreateLogFile();
-		}
-
+		ifstream log_file(global_file_name_);
 		log_file.close();
 
-		ofstream log_file_out(GLOBAL_LOG_NAME, ofstream::app);
+		ofstream log_file_out(global_file_name_, ofstream::app);
 
 		if (log_file_out.is_open()) {							
 			
@@ -72,7 +88,7 @@ namespace clogging {
 		}
 	}
 
-	bool Logger::JSONSyntax(string level, string output_msg) {
+	/*bool Logger::JSONSyntax(string level, string output_msg) {
 
 		char *current_time = CurrentTimeStamp();
 
@@ -98,7 +114,7 @@ namespace clogging {
 			log_file_out.close();
 			return true;
 		}
-	}
+	}*/
 	
 	char *Logger::CurrentTimeStamp() {
 
