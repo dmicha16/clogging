@@ -1,2 +1,2 @@
 # clogging
-Extensible C++ logging class
+Simple c++ logging class
