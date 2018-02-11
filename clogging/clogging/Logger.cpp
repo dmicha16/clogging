@@ -49,7 +49,6 @@ namespace clogging {
 
 		TXTSyntax(level, output_msg);
 	}
-
 	
 	bool Logger::TXTSyntax(string level, string output_msg) {
 
@@ -83,7 +82,13 @@ namespace clogging {
 			CreateLogFile();
 		}
 
-		log_file.close();		
+		log_file.close();
+
+		string json_array[10][10] = {
+
+
+
+		};
 
 		ofstream log_file_out(GLOBAL_LOG_NAME, ofstream::app);
 

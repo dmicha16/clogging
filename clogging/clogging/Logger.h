@@ -26,6 +26,9 @@
 #define GLOBAL_LOG_NAME "clogging.log"
 
 #define INIT_CLOGGING clogging::Logger ToLog
+#define CLOG(message, level, type) ToLog.Clog(message, level, type)
+#define CLOG(message, level)       ToLog.Clog(message, level)
+#define CLOG(message)			   ToLog.Clog(message)
 
 using namespace std;
 
@@ -36,13 +39,7 @@ namespace clogging {
 		char *CurrentTimeStamp();
 		const char *global_file_name_;
 
-	public:		
-
-		template<typename T>
-		Logger & operator<<(T const & that) {
-			stringstream stream << that;
-			return *this;
-		}
+	public:				
 
 		bool CreateLogFile();
 
