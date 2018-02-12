@@ -288,3 +288,4 @@ __pycache__/
 *.xsd.cs
 
 /clogging/clogging/test_log.txt
+/clogging/clogging/json.hpp

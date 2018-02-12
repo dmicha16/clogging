@@ -2,6 +2,8 @@
 #include "Logger.h"
 #pragma warning(disable : 4996)
 
+using json = nlohmann::json;
+
 namespace clogging {
 
 	Logger::Logger() {		
@@ -43,7 +45,7 @@ namespace clogging {
 				TXTSyntax(level, output_msg);
 				break;
 			case 2:
-				//JSONSyntax(level, output_msg);
+				JSONSyntax(level, output_msg);
 				break;			
 			default:
 				TXTSyntax(level, output_msg);
@@ -71,7 +73,7 @@ namespace clogging {
 		TXTSyntax(level, output_msg);
 	}
 	
-	bool Logger::TXTSyntax(string level, string output_msg) {
+	void Logger::TXTSyntax(string level, string output_msg) {
 
 		char *current_time = CurrentTimeStamp();		
 
@@ -83,38 +85,33 @@ namespace clogging {
 		if (log_file_out.is_open()) {							
 			
 			log_file_out << "[" << current_time << "] [" << level << "] " << output_msg << "\n";
-			log_file_out.close();
-			return true;
+			log_file_out.close();			
 		}
 	}
 
-	/*bool Logger::JSONSyntax(string level, string output_msg) {
+	void Logger::JSONSyntax(string level, string output_msg) {
 
 		char *current_time = CurrentTimeStamp();
 
-		ifstream log_file(GLOBAL_LOG_NAME);
-
-		if (!log_file) {
-			CreateLogFile();
-		}
-
-		log_file.close();
-
-		string json_array[10][10] = {
-
-
-
+		json output_json = {
+			{"timestamp", current_time},
+			{"verbosity", level},
+			{"output_message", output_msg}
 		};
 
-		ofstream log_file_out(GLOBAL_LOG_NAME, ofstream::app);
+		string json_dump = output_json.dump();
+
+		ifstream log_file(global_file_name_);
+		log_file.close();
+
+		ofstream log_file_out(global_file_name_, ofstream::app);
 
 		if (log_file_out.is_open()) {
 
-			log_file_out << "[" << current_time << "] [" << level << "] " << output_msg << "\n";
-			log_file_out.close();
-			return true;
+			log_file_out << json_dump << "\n";
+			log_file_out.close();			
 		}
-	}*/
+	}
 	
 	char *Logger::CurrentTimeStamp() {
 

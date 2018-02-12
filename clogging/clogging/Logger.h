@@ -10,6 +10,7 @@
 #include <fstream>
 #include <sstream>
 #include <iomanip>
+#include "json.hpp"
 
 #define EMERG "EMERGENCY"
 #define ALERT "ALERT"
@@ -29,12 +30,12 @@
 #define ADD_FILE(file_name)		   ToLog.AddFile(file_name)
 
 #define GET_MACRO(_1,_2,_3,NAME,...) NAME
-#define CLOG(...) GET_MACRO(__VA_ARGS__, CLOG3, CLOG2, CLOG1, CLOG)(__VA_ARGS__)
+#define CLOG(...) GET_MACRO(__VA_ARGS__, CLOG3, CLOG2, CLOG1)(__VA_ARGS__)
 
 #define CLOG3(output_msg, level, type) ToLog.Clog(output_msg, level, type)
 #define CLOG2(output_msg, level) ToLog.Clog(output_msg, level)
 #define CLOG1(output_msg) ToLog.Clog(output_msg)
-#define CLOG() ToLog.Clog()
+//#define CLOG() ToLog.Clog()
 
 using namespace std;
 
@@ -44,6 +45,9 @@ namespace clogging {
 	private:
 		char *CurrentTimeStamp();
 		string global_file_name_;
+
+		void TXTSyntax(string level, string output_msg);
+		void JSONSyntax(string level, string output_msg);
 				
 	public:
 
@@ -53,10 +57,7 @@ namespace clogging {
 		void Clog(string output_msg, string level, int specify_type);
 		void Clog(string output_msg, string level);
 		void Clog(string output_msg);
-		void Clog();
-
-		bool TXTSyntax(string level, string output_msg);				
-		//bool JSONSyntax(string level, string output_msg);
+		void Clog();		
 
 		Logger();
 		~Logger();
