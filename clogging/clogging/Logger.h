@@ -12,14 +12,14 @@
 #include <iomanip>
 #include "json.hpp"
 
-#define EMERG "EMERGENCY"
-#define ALERT "ALERT"
-#define CRIT "CRITICAL"
-#define ERR "ERROR"
-#define WARNING "WARNING"
-#define NOTICE "NOTICE"
-#define INFO "INFO"
-#define DEBUG "DEBUG"
+//#define EMERG "EMERGENCY"
+//#define ALERT "ALERT"
+//#define CRIT "CRITICAL"
+//#define ERR "ERROR"
+//#define WARNING "WARNING"
+//#define NOTICE "NOTICE"
+//#define INFO "INFO"
+//#define DEBUG "DEBUG"
 
 #define LOG 1
 #define JSON 2
@@ -37,6 +37,8 @@
 #define CLOG1(output_msg) ToLog.Clog(output_msg)
 //#define CLOG() ToLog.Clog()
 
+enum Verbosity {DEBUG, INFO, NOTICE, WARNING, ERROR, CRIT, ALERT, EMERGENCY};
+
 using namespace std;
 
 namespace clogging {	
@@ -46,16 +48,17 @@ namespace clogging {
 		char *CurrentTimeStamp();
 		string global_file_name_;
 
-		void TXTSyntax(string level, string output_msg);
-		void JSONSyntax(string level, string output_msg);
+		void TXTSyntax(Verbosity level, string output_msg);
+		void JSONSyntax(Verbosity level, string output_msg);
+		string EnumStringValue(Verbosity level);
 				
 	public:
 
 		void AddFile(string file_name);
 		//void AddFile(string file_name, string path);
 
-		void Clog(string output_msg, string level, int specify_type);
-		void Clog(string output_msg, string level);
+		void Clog(string output_msg, Verbosity level, int specify_type);
+		void Clog(string output_msg, Verbosity level);
 		void Clog(string output_msg);
 		void Clog();		
 

@@ -38,7 +38,7 @@ namespace clogging {
 		log_file.close();
 	}*/
 	
-	void Logger::Clog(string output_msg, string level, int specify_type) {		
+	void Logger::Clog(string output_msg, Verbosity level, int specify_type) {
 		
 		switch (specify_type) {
 			case 1:
@@ -53,27 +53,26 @@ namespace clogging {
 		}
 	}
 
-	void Logger::Clog(string output_msg, string level) {
+	void Logger::Clog(string output_msg, Verbosity level) {
 		
 		TXTSyntax(level, output_msg);
 	}
 
-	void Logger::Clog(string output_msg) {
+	void Logger::Clog(string output_msg) {		
 
-		string level = DEBUG;
-
-		TXTSyntax(level, output_msg);
+		TXTSyntax(Verbosity::DEBUG, output_msg);
 	}
 
 	void Logger::Clog() {
-
-		string level = INFO;
+		
 		string output_msg = "Default placeholder message.";
 
-		TXTSyntax(level, output_msg);
+		TXTSyntax(Verbosity::INFO, output_msg);
 	}
 	
-	void Logger::TXTSyntax(string level, string output_msg) {
+	void Logger::TXTSyntax(Verbosity level, string output_msg) {
+
+		string level_value = EnumStringValue(level);
 
 		char *current_time = CurrentTimeStamp();		
 
@@ -84,18 +83,20 @@ namespace clogging {
 
 		if (log_file_out.is_open()) {							
 			
-			log_file_out << "[" << current_time << "] [" << level << "] " << output_msg << "\n";
+			log_file_out << "[" << current_time << "] [" << level_value << "] " << output_msg << "\n";
 			log_file_out.close();			
 		}
 	}
 
-	void Logger::JSONSyntax(string level, string output_msg) {
+	void Logger::JSONSyntax(Verbosity level, string output_msg) {
+
+		string level_value = EnumStringValue(level);
 
 		char *current_time = CurrentTimeStamp();
 
 		json output_json = {
 			{"timestamp", current_time},
-			{"verbosity", level},
+			{"verbosity", level_value},
 			{"output_message", output_msg}
 		};
 
@@ -111,6 +112,39 @@ namespace clogging {
 			log_file_out << json_dump << "\n";
 			log_file_out.close();			
 		}
+	}
+
+	string Logger::EnumStringValue(Verbosity level) {
+
+		switch (level) {
+		case DEBUG:
+			return "DEBUG";
+			break;
+		case INFO:
+			return "INFO";
+			break;
+		case NOTICE:
+			return "NOTICE";
+			break;
+		case WARNING:
+			return "WARNING";
+			break;
+		case ERROR:
+			return "ERROR";
+			break;
+		case CRIT:
+			return "CRIT";
+			break;
+		case ALERT:
+			return "ALERT";
+			break;
+		case EMERGENCY:
+			return "EMERGENCY";
+			break;
+		default:
+			break;
+		}
+		return string();
 	}
 	
 	char *Logger::CurrentTimeStamp() {
