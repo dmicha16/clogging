@@ -24,7 +24,7 @@ namespace clogging {
 		log_file.close();		
 	}
 
-	/*void Logger::AddFile(string file_name, string path) {
+	void Logger::AddFile(string file_name, string path) {
 
 		global_file_name_ = file_name;
 
@@ -36,9 +36,9 @@ namespace clogging {
 			log_file_create.close();
 		}
 		log_file.close();
-	}*/
+	}
 	
-	void Logger::Clog(string output_msg, Verbosity level, int specify_type) {
+	void Logger::Clog(string output_msg, Verbosity level, Output specify_type) {
 		
 		switch (specify_type) {
 			case 1:
@@ -46,7 +46,11 @@ namespace clogging {
 				break;
 			case 2:
 				JSONSyntax(level, output_msg);
-				break;			
+				break;
+			case 3:
+				TXTSyntax(level, output_msg);
+				JSONSyntax(level, output_msg);
+				break;
 			default:
 				TXTSyntax(level, output_msg);
 				break;
