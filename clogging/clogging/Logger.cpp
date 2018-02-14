@@ -41,13 +41,13 @@ namespace clogging {
 	void Logger::Clog(string output_msg, Verbosity level, Output specify_type) {
 		
 		switch (specify_type) {
-			case 1:
+			case 0:
 				TXTSyntax(level, output_msg);
 				break;
-			case 2:
+			case 1:
 				JSONSyntax(level, output_msg);
 				break;
-			case 3:
+			case 2:
 				TXTSyntax(level, output_msg);
 				JSONSyntax(level, output_msg);
 				break;
@@ -74,7 +74,7 @@ namespace clogging {
 		TXTSyntax(Verbosity::INFO, output_msg);
 	}
 	
-	void Logger::TXTSyntax(Verbosity level, string output_msg) {
+	void Logger::TXTSyntax(Verbosity level, string output_msg) {               
 
 		string level_value = EnumStringValue(level);
 
@@ -137,7 +137,7 @@ namespace clogging {
 			return "ERROR";
 			break;
 		case CRIT:
-			return "CRIT";
+			return "CRITICAL";
 			break;
 		case ALERT:
 			return "ALERT";
