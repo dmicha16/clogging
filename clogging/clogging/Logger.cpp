@@ -28,6 +28,9 @@ namespace clogging {
 
 		global_file_name_ = file_name;
 
+		path = path + file_name;
+		cout << path;
+
 		ifstream log_file(file_name);
 
 		if (!log_file) {

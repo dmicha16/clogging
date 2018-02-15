@@ -14,11 +14,11 @@
 
 #define INIT_CLOGGING clogging::Logger ToLog
 
-//#define GET_MACRO(_1,_2,NAME,...) NAME
-//#define ADD_FILE(...) GET_MACRO(__VA_ARGS__, ADD_FILE2, ADD_FILE1)(__VA_ARGS__)
+#define GET_MACRO(_1,_2,_3, NAME,...) NAME
+#define ADD_FILE(...) GET_MACRO(__VA_ARGS__, ADD_FILE2, ADD_FILE1)(__VA_ARGS__)
 
-//#define ADD_FILE2(file_name, path) ToLog.AddFile(file_name, path);
-#define ADD_FILE(file_name) ToLog.AddFile(file_name)
+#define ADD_FILE2(file_name, path) ToLog.AddFile(file_name, path);
+//#define ADD_FILE1(file_name) ToLog.AddFile(file_name)
 
 #define GET_MACRO(_1,_2,_3,NAME,...) NAME
 #define CLOG(...) GET_MACRO(__VA_ARGS__, CLOG3, CLOG2, CLOG1)(__VA_ARGS__)
@@ -46,8 +46,8 @@ namespace clogging {
 				
 	public:
 
-		void AddFile(string file_name);
 		void AddFile(string file_name, string path);
+		void AddFile(string file_name);	
 
 		void Clog(string output_msg, Verbosity level, Output specify_type);
 		void Clog(string output_msg, Verbosity level);
