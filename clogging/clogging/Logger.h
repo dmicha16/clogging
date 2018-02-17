@@ -14,14 +14,14 @@
 
 #define INIT_CLOGGING clogging::Logger ToLog
 
-#define GET_MACRO(_1,_2,_3, NAME,...) NAME
-#define ADD_FILE(...) GET_MACRO(__VA_ARGS__, ADD_FILE2, ADD_FILE1)(__VA_ARGS__)
+#define GET_MACRO(_1,_2, _3, NAME,...) NAME
 
-#define ADD_FILE2(file_name, path) ToLog.AddFile(file_name, path);
-//#define ADD_FILE1(file_name) ToLog.AddFile(file_name)
-
-#define GET_MACRO(_1,_2,_3,NAME,...) NAME
+#define ADD_FILE(...) GET_MACRO(__VA_ARGS__, ADD_FILE3, ADD_FILE2, ADD_FILE1)(__VA_ARGS__)
 #define CLOG(...) GET_MACRO(__VA_ARGS__, CLOG3, CLOG2, CLOG1)(__VA_ARGS__)
+
+#define ADD_FILE3(file_name, path, future_param)
+#define ADD_FILE2(file_name, path) ToLog.AddFile(file_name, path)
+#define ADD_FILE1(file_name) ToLog.AddFile(file_name)
 
 #define CLOG3(output_msg, level, type) ToLog.Clog(output_msg, level, type)
 #define CLOG2(output_msg, level) ToLog.Clog(output_msg, level)
