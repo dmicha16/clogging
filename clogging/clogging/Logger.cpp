@@ -25,17 +25,15 @@ namespace clogging {
 	}
 
 	void Logger::AddFile(string file_name, string path) {
-
-		global_file_name_ = file_name;
-
-		path = path + file_name;
+		 
+		global_file_name_ = path + file_name;
 		cout << path;
 
 		ifstream log_file(file_name);
 
-		if (!log_file) {
+		if (!log_file) {			
 			ofstream log_file_create(path);
-			log_file_create.open(file_name);
+			log_file_create.open(path);
 			log_file_create.close();
 		}
 		log_file.close();
