@@ -5,7 +5,7 @@ Clogging is a (very) simple c++ logging class.
   - 8 verbosity levels
   - Optional JSON output
   - Very simple usage
-  - No Windows.h
+  - Optional Windows.h for VS OutputDebugString usage
 
 I needed a very simple and quick logging class for my university and personal projects. The ones already on github do way more than what I need, so I've made my own.
 
@@ -157,7 +157,8 @@ The code above would produce an output like this, (in new lines)
  - Timer
  - Custom time to keep the logs
  - Custom JSON object depth
- - Optional OutputDebugString in VS versions
+ - VS OutputDebugString colors?
+ - Conditional logging
 
 License
 ----
