@@ -25,13 +25,13 @@ namespace clogging {
 	}
 
 	void Logger::AddFile(string file_name, string path) {
-		 
+
 		global_file_name_ = path + file_name;
 		cout << path;
 
 		ifstream log_file(file_name);
 
-		if (!log_file) {			
+		if (!log_file) {
 			ofstream log_file_create(path);
 			log_file_create.open(path);
 			log_file_create.close();
@@ -63,7 +63,7 @@ namespace clogging {
 		TXTSyntax(level, output_msg);
 	}
 
-	void Logger::Clog(string output_msg) {		
+	void Logger::Clog(string output_msg) {	
 
 		TXTSyntax(Verbosity::DEBUG, output_msg);
 	}
@@ -119,6 +119,53 @@ namespace clogging {
 		}
 	}
 
+#ifdef CLOG_USE_VS 1
+	void Logger::ClogVS(string output_msg, Verbosity level, Output_vs specify_type) {
+
+		string level_value = EnumStringValue(level);
+		char *current_time = CurrentTimeStamp();
+
+		stringstream debug_output;
+		debug_output << "[" << current_time << "] " << "[" << level_value << "] " << output_msg << endl;
+		OutputDebugStringA(debug_output.str().c_str());
+
+		switch (specify_type) {
+		case 0:
+			// do nothing
+			break;
+		case 1:
+			JSONSyntax(level, output_msg);
+			break;
+		case 2:
+			TXTSyntax(level, output_msg);
+			break;
+		case 3:
+			JSONSyntax(level, output_msg);
+			TXTSyntax(level, output_msg);
+			break;
+		}
+	}
+
+	void Logger::ClogVS(string output_msg, Verbosity level) {
+
+		string level_value = EnumStringValue(level);
+		char *current_time = CurrentTimeStamp();
+
+		stringstream debug_output;
+		debug_output << "[" << current_time << "] " << "[" << level_value << "] " << output_msg << endl;
+		OutputDebugStringA(debug_output.str().c_str());
+	}
+
+	void Logger::ClogVS(string output_msg) {
+
+		char *current_time = CurrentTimeStamp();
+
+		stringstream debug_output;
+		debug_output << "[" << current_time << "] " << output_msg << endl;
+		OutputDebugStringA(debug_output.str().c_str());
+	}
+#endif // CLOG_USE_VS 1
+
 	string Logger::EnumStringValue(Verbosity level) {
 
 		switch (level) {
@@ -131,10 +178,10 @@ namespace clogging {
 		case NOTICE:
 			return "NOTICE";
 			break;
-		case WARNING:
+		case WARN:
 			return "WARNING";
 			break;
-		case ERROR:
+		case ERR:
 			return "ERROR";
 			break;
 		case CRIT:
@@ -143,7 +190,7 @@ namespace clogging {
 		case ALERT:
 			return "ALERT";
 			break;
-		case EMERGENCY:
+		case EMERG:
 			return "EMERGENCY";
 			break;
 		default:

@@ -11,13 +11,34 @@
 #include <sstream>
 #include <iomanip>
 #include "json.hpp"
+#include <sstream>
+
+// Uncomment any of these macros for more logging and debugging options.
+	// To use Windows.h and OutputDebugString in any Visual Studio version.
+#define CLOG_USE_VS 1 
+
+//------------
+
+#ifdef CLOG_USE_VS 1
+	#include <Windows.h>
+	#define CLOG_VS(output_msg) ToLog.ClogVS(output_msg)
+#endif // CLOG_USE_VS 1
+
+//Init clogging macro:
 
 #define INIT_CLOGGING clogging::Logger ToLog
+
+//Macro overloading:
 
 #define GET_MACRO(_1,_2, _3, NAME,...) NAME
 
 #define ADD_FILE(...) GET_MACRO(__VA_ARGS__, ADD_FILE3, ADD_FILE2, ADD_FILE1)(__VA_ARGS__)
 #define CLOG(...) GET_MACRO(__VA_ARGS__, CLOG3, CLOG2, CLOG1)(__VA_ARGS__)
+#define CLOG_VS(...) GET_MACRO(__VA_ARGS__, CLOG_VS3, CLOG_VS2, CLOG_VS1)(__VA_ARGS__)
+
+#define CLOG_VS3(output_msg, level, type) ToLog.ClogVS(output_msg, level, type)
+#define CLOG_VS2(output_msg, level) ToLog.ClogVS(output_msg, level)
+#define CLOG_VS1(output_msg) ToLog.ClogVS(output_msg)
 
 #define ADD_FILE3(file_name, path, future_param)
 #define ADD_FILE2(file_name, path) ToLog.AddFile(file_name, path)
@@ -29,7 +50,8 @@
 //#define CLOG() ToLog.Clog()
 
 enum Output {DEFAULT, JSON, BOTH};
-enum Verbosity {DEBUG, INFO, NOTICE, WARNING, ERROR, CRIT, ALERT, EMERGENCY};
+enum Output_vs {DEBUG_ONLY, TO_FILE_JSON, TO_FILE_DEF, TO_FILE_BOTH};
+enum Verbosity {DEBUG, INFO, NOTICE, WARN, ERR, CRIT, ALERT, EMERG};
 
 using namespace std;
 
@@ -47,7 +69,11 @@ namespace clogging {
 	public:
 
 		void AddFile(string file_name, string path);
-		void AddFile(string file_name);	
+		void AddFile(string file_name);
+
+		void ClogVS(string output_msg, Verbosity level, Output_vs specify_type);
+		void ClogVS(string output_msg, Verbosity level);
+		void ClogVS(string output_msg);
 
 		void Clog(string output_msg, Verbosity level, Output specify_type);
 		void Clog(string output_msg, Verbosity level);
