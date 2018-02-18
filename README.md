@@ -22,7 +22,7 @@ I needed a very simple and quick logging class for my university and personal pr
 | ALERT | Alert |
 | EMERG | Emergency |
 
-### Installation
+# Installation
 
 Installation is very simple, copy the files into your project dir and include "Logger.h". There is a JSON dependency, however. So for those functionalities include your favorite JSON lib. The one I used here is [JSON for modern C++](https://github.com/nlohmann/json).
 
@@ -37,7 +37,7 @@ int main() {
 ```
 
 ### Default behaviour and output
-If no other parameters are given to CLOG, it will default to DEBUG and to default output type (non- JSON). 
+If no other arguments are passed to CLOG, it will default to verbose DEBUG and to the default output type (non- JSON). 
 ``` c++
 #include "Logger.h"
 
@@ -57,7 +57,7 @@ The code above would produce an output like that:
 [Sat Feb 17 19:43:53 2018] [DEBUG] hello world!
 ```
 
-You can also set a custom file location by adding another parameter to ADD_FILE:
+You can also set a custom file location by adding another argument to ADD_FILE:
 
 ``` c++
 #include "Logger.h"
@@ -94,8 +94,8 @@ The code above would produce an output like this:
 [Sat Feb 17 19:43:53 2018] [INFO] hello world!
 ```
 
-### Output customization CLOG parameters
-As mentioned above, without including the output type, CLOG will default to normal output, but you can also set that if you wish to see from the code what type is being outputted. This produces the same output as the example above.
+### Output customization of CLOG arguments
+As mentioned above, without including the output type, CLOG will default to normal output format, but you can also set that if you wish to see from the code what type is being outputted. This produces the same output as the example above.
 
 ``` c++
 #include "Logger.h"
@@ -114,7 +114,7 @@ The code above would produce an output like this:
 [Sat Feb 17 19:43:53 2018] [INFO] hello world!
 ```
 
-To use the JSON output type, add change the 3rd parameter to *Output::JSON*.
+To use the JSON output format, add change the 3rd argument to *Output::JSON*.
 
 ``` c++
 #include "Logger.h"
@@ -133,7 +133,7 @@ The code above would produce an output like this:
 {"output_message":"hello world!","timestamp":"Sat Feb 17 19:47:23 2018","verbosity":"INFO"}
 ```
 
-There is a possibility to produce both the default and the JSON output types and the same time:
+There is a possibility to produce both the default and the JSON output format and the same time:
 ``` c++
 #include "Logger.h"
 
@@ -151,6 +151,31 @@ The code above would produce an output like this, (in new lines)
 [Sat Feb 17 19:52:54 2018] [WARNING] hello world!
 {"output_message":"hello world!","timestamp":"Sat Feb 17 19:52:54 2018","verbosity":"WARNING"}
 ```
+
+# Using Visual Studio OutputDebugStrings
+Now there is a possibility to use OutputDebugStrings in Visual Studio. All you have to do is define the macro CLOG_USE_VS. You will have to do this in "Logger.h", but there is a dedicated space at the beggining of the file for these macros.
+
+```c++
+// Uncomment any of these macros for more logging and debugging options.
+	// To use Windows.h and OutputDebugString in any Visual Studio version.
+#define CLOG_USE_VS 1 
+//------------
+```
+
+### Writing into VS Debug
+It is simple to write into the Debug console, all you have to do is:
+
+```c++
+string msg = "hello world!";
+//Takes three arguments
+CLOG_VS(msg, Verbosity::EMERG, Output_vs::TO_FILE_BOTH);
+```
+You have the option to either write into the Debug console, or write into Debug and the file (in default format), or write into the Debug console and into the file both as default and JSON format. You can choose to only include your massage. The default output will look like this in the Debug console:
+
+```c++
+[Sun Feb 18 20:48:44 2018] [EMERGENCY] hello world!
+```
+
 ### Todos
 
  - Custom verbosity levels
