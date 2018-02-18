@@ -5,7 +5,7 @@ Clogging is a (very) simple c++ logging class.
   - 8 verbosity levels
   - Optional JSON output
   - Very simple usage
-  - Example of usage
+  - No Windows.h
 
 I needed a very simple and quick logging class for my university and personal projects. The ones already on github do way more than what I need, so I've made my own.
 
@@ -17,7 +17,7 @@ I needed a very simple and quick logging class for my university and personal pr
 | INFO | Information |
 | NOTICE | Notice |
 | WARN | Warning |
-| ERROR | Error |
+| ERR | Error |
 | CRIT | Critical |
 | ALERT | Alert |
 | EMERG | Emergency |
@@ -56,6 +56,22 @@ The code above would produce an output like that:
 ```
 [Sat Feb 17 19:43:53 2018] [DEBUG] hello world!
 ```
+
+You can also set a custom file location by adding another parameter to ADD_FILE:
+
+``` c++
+#include "Logger.h"
+
+int main() {
+
+	INIT_CLOGGING;
+	ADD_FILE("clogging.log", "C:\\my_dir\\");
+	
+	string msg = "hello world!";
+	CLOG(msg);
+}
+```
+
 ### Verbosity CLOG parameters
 
 Add the desired verbosity level with *Verbosity::INFO*.
