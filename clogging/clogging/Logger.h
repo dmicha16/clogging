@@ -13,6 +13,9 @@
 #include "json.hpp"
 #include <sstream>
 
+#include <chrono>
+#include <thread>
+
 // Uncomment any of these macros for more logging and debugging options.
 	// To use Windows.h and OutputDebugString in any Visual Studio version.
 #define CLOG_USE_VS 1 
@@ -59,8 +62,11 @@ namespace clogging {
 	
 	class Logger {
 	private:
-		char *CurrentTimeStamp();
 		string global_file_name_;
+		chrono::steady_clock::time_point global_init_timestamp_;
+
+		char *CurrentTimeStamp();
+		double EpochSeconds(chrono::steady_clock::time_point global_init_timestamp_);
 
 		void TXTSyntax(Verbosity level, string output_msg);
 		void JSONSyntax(Verbosity level, string output_msg);

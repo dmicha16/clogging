@@ -6,7 +6,8 @@ using json = nlohmann::json;
 
 namespace clogging {
 
-	Logger::Logger() {		
+	Logger::Logger() {
+		global_init_timestamp_ = chrono::high_resolution_clock::now();		
 		
 	}	
 	
@@ -78,8 +79,8 @@ namespace clogging {
 	void Logger::TXTSyntax(Verbosity level, string output_msg) {               
 
 		string level_value = EnumStringValue(level);
-
-		char *current_time = CurrentTimeStamp();		
+		char *current_time = CurrentTimeStamp();			
+		double system_uptime = EpochSeconds(global_init_timestamp_);
 
 		ifstream log_file(global_file_name_);
 		log_file.close();
@@ -88,7 +89,8 @@ namespace clogging {
 
 		if (log_file_out.is_open()) {							
 			
-			log_file_out << "[" << current_time << "] [" << level_value << "] " << output_msg << "\n";
+			log_file_out << "[" << current_time << "] [" << level_value << "] " <<
+				"[" << system_uptime << "] " <<output_msg << "\n";
 			log_file_out.close();			
 		}
 	}
@@ -98,11 +100,13 @@ namespace clogging {
 		string level_value = EnumStringValue(level);
 
 		char *current_time = CurrentTimeStamp();
+		double system_uptime = EpochSeconds(global_init_timestamp_);
 
 		json output_json = {
 			{"timestamp", current_time},
 			{"verbosity", level_value},
-			{"output_message", output_msg}
+			{"output_message", output_msg},
+			{"system_uptime", system_uptime }
 		};
 
 		string json_dump = output_json.dump();
@@ -124,9 +128,14 @@ namespace clogging {
 
 		string level_value = EnumStringValue(level);
 		char *current_time = CurrentTimeStamp();
+		double system_uptime = EpochSeconds(global_init_timestamp_);
 
 		stringstream debug_output;
-		debug_output << "[" << current_time << "] " << "[" << level_value << "] " << output_msg << endl;
+		debug_output
+			<< "[" << current_time << "] "
+			<< "[" << level_value << "] "
+			<< "[" << system_uptime << "] "
+			<< output_msg << endl;
 		OutputDebugStringA(debug_output.str().c_str());
 
 		switch (specify_type) {
@@ -151,17 +160,33 @@ namespace clogging {
 		string level_value = EnumStringValue(level);
 		char *current_time = CurrentTimeStamp();
 
+		double system_uptime = EpochSeconds(global_init_timestamp_);
+
 		stringstream debug_output;
-		debug_output << "[" << current_time << "] " << "[" << level_value << "] " << output_msg << endl;
+		debug_output
+			<< "[" << current_time << "] "
+			<< "[" << level_value << "] "
+			<< "[" << system_uptime << "] "
+			<< output_msg << endl;
+
 		OutputDebugStringA(debug_output.str().c_str());
 	}
 
 	void Logger::ClogVS(string output_msg) {
 
 		char *current_time = CurrentTimeStamp();
+		double system_uptime = EpochSeconds(global_init_timestamp_);
+
+		Verbosity level = Verbosity::DEBUG;
+		string level_value = EnumStringValue(level);		
 
 		stringstream debug_output;
-		debug_output << "[" << current_time << "] " << output_msg << endl;
+		debug_output
+			<< "[" << current_time << "] "
+			<< "[" << level_value << "] "
+			<< "[" << system_uptime << "] "
+			<< output_msg << endl;
+
 		OutputDebugStringA(debug_output.str().c_str());
 	}
 #endif // CLOG_USE_VS 1
@@ -210,7 +235,19 @@ namespace clogging {
 		current[strlen(current) - 1] = '\0';
 
 		return current;
-	}	
+	}
+
+	double Logger::EpochSeconds(chrono::steady_clock::time_point global_init_timestamp_) {
+
+		chrono::steady_clock::time_point current_timestamp =
+			std::chrono::high_resolution_clock::now();
+
+		std::chrono::duration<double, std::milli> duration_t =
+			current_timestamp - global_init_timestamp_;
+
+		return duration_t.count();
+	}
+
 	Logger::~Logger() {
 	}
 }
