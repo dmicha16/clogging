@@ -76,7 +76,7 @@ namespace clogging {
 		TXTSyntax(Verbosity::INFO, output_msg);
 	}
 	
-	void Logger::TXTSyntax(Verbosity level, string output_msg) {               
+	void Logger::TXTSyntax(Verbosity level, string output_msg) {                 
 
 		string level_value = EnumStringValue(level);
 		char *current_time = CurrentTimeStamp();			
