@@ -14,9 +14,9 @@
 #pragma warning(disable : 4996) //Visual studio error suppress
 
 
-//#define CLOG_T(time_param) Timer.
+#define CLOG_T(custom_timer, time_param) Timer.ClogT(custom_timer, time_param)
 
-typedef std::chrono::steady_clock::time_point my_time_point;
+typedef std::chrono::steady_clock::time_point timepoint_t;
 
 enum Timer_t {START, END};
 
@@ -26,11 +26,11 @@ private:
 	double TimerStart(std::string custom_timer);
 	double TimerEnd(std::string custom_timer);	
 
-	std::map<std::string, my_time_point> timer_map;
+	std::map<std::string, timepoint_t> timer_map_;
 
 public:
 
-	double SystemUpMillis(my_time_point global_init_timestamp_);
+	double SystemUpMillis(timepoint_t global_init_timestamp_);
 	std::string TimeStamp();
 
 	void ClogT(std::string custom_timer, Timer_t time_param);
