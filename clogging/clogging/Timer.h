@@ -16,19 +16,21 @@
 
 //#define CLOG_T(time_param) Timer.
 
+typedef std::chrono::steady_clock::time_point my_time_point;
+
 enum Timer_t {START, END};
 
 class Timer {
 
 private:
 	double TimerStart(std::string custom_timer);
-	double TimerEnd(std::string custom_timer);
+	double TimerEnd(std::string custom_timer);	
 
-	//map<string, double> custom_timers;
+	std::map<std::string, my_time_point> timer_map;
 
 public:
 
-	double SystemUpMillis(std::chrono::steady_clock::time_point global_init_timestamp_);
+	double SystemUpMillis(my_time_point global_init_timestamp_);
 	std::string TimeStamp();
 
 	void ClogT(std::string custom_timer, Timer_t time_param);

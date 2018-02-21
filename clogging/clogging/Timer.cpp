@@ -4,9 +4,9 @@
 Timer::Timer() {
 }
 
-double Timer::SystemUpMillis(std::chrono::steady_clock::time_point global_init_timestamp_) {
+double Timer::SystemUpMillis(my_time_point global_init_timestamp_) {
 
-	std::chrono::steady_clock::time_point current_timestamp =
+	my_time_point current_timestamp =
 		std::chrono::high_resolution_clock::now();
 
 	std::chrono::duration<double, std::milli> duration_t =
@@ -44,6 +44,19 @@ void Timer::ClogT(std::string custom_timer, Timer_t time_param) {
 
 double Timer::TimerStart(std::string custom_timer) {
 
+	my_time_point highres_current_t = std::chrono::high_resolution_clock::now();
+
+	if (timer_map.empty) {
+		timer_map.emplace(std::pair<std::string, my_time_point>(custom_timer, highres_current_t));
+	}
+	
+
+	for (size_t i = 0; i < timer_map.size; i++) {
+		
+		if (timer_map[i] == custom_timer) {
+
+		}
+	}
 	return 0;
 
 }

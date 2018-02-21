@@ -47,7 +47,7 @@ namespace clogging {
 
 		Timer Timer;
 		std::string global_file_name_;
-		std::chrono::steady_clock::time_point global_init_timestamp_;
+		my_time_point global_init_timestamp_;
 
 		void TXTSyntax(Verbosity level, std::string output_msg);
 		void JSONSyntax(Verbosity level, std::string output_msg);
