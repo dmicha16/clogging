@@ -14,7 +14,7 @@
 #pragma warning(disable : 4996) //Visual studio error suppress
 
 
-#define CLOG_T(custom_timer, time_param) Timer.ClogT(custom_timer, time_param)
+#define CLOG_T(custom_timer, time_param) TimerObj.ClogT(custom_timer, time_param)
 
 typedef std::chrono::steady_clock::time_point timepoint_t;
 
@@ -27,6 +27,8 @@ private:
 	double TimerEnd(std::string custom_timer);	
 
 	std::map<std::string, timepoint_t> timer_map_;
+
+	void TimerOutput(double timer_duration, std::string timer_name);
 
 public:
 

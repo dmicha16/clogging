@@ -28,31 +28,30 @@ std::string Timer::TimeStamp() {
 	return time_stamp;
 }
 
-void Timer::ClogT(std::string custom_timer, Timer_t time_param) {
+void Timer::ClogT(std::string custom_timer, Timer_t time_param) {	
 
 	switch (time_param) {
 	case START:
 		TimerStart(custom_timer);
 		break;
 	case END:
-		TimerEnd(custom_timer);
-		break;
-	default:
+		double timer_duration = TimerEnd(custom_timer);
+		TimerOutput(timer_duration, custom_timer);
 		break;
 	}
 }
 
 double Timer::TimerStart(std::string custom_timer) {
 
-	timepoint_t highres_current_t = std::chrono::high_resolution_clock::now();
+	timepoint_t timer_start = std::chrono::high_resolution_clock::now();
 
-	if (timer_map_.empty) {
-		timer_map_.emplace(std::pair<std::string, timepoint_t>(custom_timer, highres_current_t));
+	if (timer_map_.empty()) {
+		timer_map_.emplace(std::pair<std::string, timepoint_t>(custom_timer, timer_start));
 
 	}
 	else {
 		timer_map_.end();
-		timer_map_.emplace(std::pair<std::string, timepoint_t>(custom_timer, highres_current_t));
+		timer_map_.emplace(std::pair<std::string, timepoint_t>(custom_timer, timer_start));
 	}
 
 	return 0;
@@ -62,21 +61,42 @@ double Timer::TimerStart(std::string custom_timer) {
 double Timer::TimerEnd(std::string custom_timer) {
 
 	timepoint_t timer_end = std::chrono::high_resolution_clock::now();
-	timepoint_t custom_timer_length;
+	std::chrono::duration<double, std::milli> timer_duration;
 
 	if (timer_map_.find(custom_timer) != timer_map_.end()) {
 
 		timepoint_t timer_start = timer_map_.find(custom_timer)->second;
-		//custom_timer_length = timer_end - timer_start;
-
-
+		timer_duration = timer_end - timer_start;
 		timer_map_.erase(custom_timer);
+
+		return timer_duration.count();
 	}
-	else{
+	else {
 
 	}
 
 	return 0;
+}
+
+void Timer::TimerOutput(double timer_duration, std::string timer_name) {
+
+	std::string current_time = TimeStamp();
+
+	std::ifstream log_file("timeroutput.log");
+	log_file.close();
+
+	std::ofstream log_file_out("timeroutput.log", std::ofstream::app);
+
+	if (log_file_out.is_open()) {
+
+		log_file_out
+			<< "[" << current_time << "] "
+			<< "[" << timer_name << "] "
+			<< "-> Duration: "
+			<< timer_duration << std::endl;
+		log_file_out.close();
+	}
+
 }
 
 Timer::~Timer() {

@@ -69,8 +69,8 @@ namespace clogging {
 	void Logger::TXTSyntax(Verbosity level, std::string output_msg) {
 
 		std::string level_value = EnumStringValue(level);
-		std::string current_time = Timer.TimeStamp();
-		double system_uptime = Timer.SystemUpMillis(global_init_timestamp_);
+		std::string current_time = TimerObj.TimeStamp();
+		double system_uptime = TimerObj.SystemUpMillis(global_init_timestamp_);
 
 		std::ifstream log_file(global_file_name_);
 		log_file.close();
@@ -91,8 +91,8 @@ namespace clogging {
 	void Logger::JSONSyntax(Verbosity level, std::string output_msg) {
 
 		std::string level_value = EnumStringValue(level);
-		std::string current_time = Timer.TimeStamp();
-		double system_uptime = Timer.SystemUpMillis(global_init_timestamp_);
+		std::string current_time = TimerObj.TimeStamp();
+		double system_uptime = TimerObj.SystemUpMillis(global_init_timestamp_);
 
 		json output_json = {
 			{"timestamp", current_time},
@@ -113,14 +113,14 @@ namespace clogging {
 			log_file_out << json_dump << "\n";
 			log_file_out.close();			
 		}
-	}
+	}	
 
 #ifdef CLOG_USE_VS 1
 	void Logger::ClogVS(std::string output_msg, Verbosity level, Output_vs specify_type) {
 
 		std::string level_value = EnumStringValue(level);
-		std::string current_time = Timer.TimeStamp();
-		double system_uptime = Timer.SystemUpMillis(global_init_timestamp_);
+		std::string current_time = TimerObj.TimeStamp();
+		double system_uptime = TimerObj.SystemUpMillis(global_init_timestamp_);
 
 		std::stringstream debug_output;
 		debug_output
@@ -150,8 +150,8 @@ namespace clogging {
 	void Logger::ClogVS(std::string output_msg, Verbosity level) {
 
 		std::string level_value = EnumStringValue(level);
-		std::string current_time = Timer.TimeStamp();
-		double system_uptime = Timer.SystemUpMillis(global_init_timestamp_);
+		std::string current_time = TimerObj.TimeStamp();
+		double system_uptime = TimerObj.SystemUpMillis(global_init_timestamp_);
 
 		std::stringstream debug_output;
 		debug_output
@@ -165,8 +165,8 @@ namespace clogging {
 
 	void Logger::ClogVS(std::string output_msg) {
 
-		std::string current_time = Timer.TimeStamp();		
-		double system_uptime = Timer.SystemUpMillis(global_init_timestamp_);
+		std::string current_time = TimerObj.TimeStamp();
+		double system_uptime = TimerObj.SystemUpMillis(global_init_timestamp_);
 
 		Verbosity level = Verbosity::DEBUG;
 		std::string level_value = EnumStringValue(level);		

@@ -15,7 +15,7 @@
 //Init clogging macro:
 
 #define INIT_CLOGGING clogging::Logger Logger
-#define CLOGGING_TIMER Timer Timer
+#define CLOGGING_TIMER Timer TimerObj
 
 //Macro overloading:
 
@@ -43,15 +43,15 @@ enum Verbosity {DEBUG, INFO, NOTICE, WARN, ERR, CRIT, ALERT, EMERG};
 
 namespace clogging {	
 	
-	class Logger : public Timer {
+	class Logger {
 	private:
 
-		Timer Timer;
+		Timer TimerObj;
 		std::string global_file_name_;
 		timepoint_t global_init_timestamp_;
 
 		void TXTSyntax(Verbosity level, std::string output_msg);
-		void JSONSyntax(Verbosity level, std::string output_msg);
+		void JSONSyntax(Verbosity level, std::string output_msg);		
 		std::string EnumStringValue(Verbosity level);
 				
 	public:
@@ -65,7 +65,7 @@ namespace clogging {
 
 		void Clog(std::string output_msg, Verbosity level, Output specify_type);
 		void Clog(std::string output_msg, Verbosity level);
-		void Clog(std::string output_msg);
+		void Clog(std::string output_msg);		
 
 		Logger();
 		~Logger();
