@@ -72,28 +72,41 @@ double Timer::TimerEnd(std::string custom_timer) {
 		return timer_duration.count();
 	}
 	else {
-
+		return 0;
 	}
-
-	return 0;
 }
 
 void Timer::TimerOutput(double timer_duration, std::string timer_name) {
 
-	std::string current_time = TimeStamp();
+	bool timer_exist = true;
+	std::string no_timer_exists;
+	if (timer_duration == 0) {
+		no_timer_exists = "The timer does not exists.";
+		timer_exist = false;
 
+	}
+
+	std::string current_time = TimeStamp();
 	std::ifstream log_file("timeroutput.log");
 	log_file.close();
 
 	std::ofstream log_file_out("timeroutput.log", std::ofstream::app);
 
-	if (log_file_out.is_open()) {
+	if (log_file_out.is_open() && timer_exist == true) {
 
 		log_file_out
 			<< "[" << current_time << "] "
 			<< "[" << timer_name << "] "
 			<< "-> Duration: "
 			<< timer_duration << std::endl;
+		log_file_out.close();
+	}
+	else if (log_file_out.is_open() && timer_exist == false) {
+
+		log_file_out
+			<< "[" << current_time << "] "
+			<< "[" << timer_name << "] -> "
+			<< no_timer_exists << std::endl;
 		log_file_out.close();
 	}
 
