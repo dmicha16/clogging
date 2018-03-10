@@ -298,3 +298,4 @@ __pycache__/
 *.vcxproj
 *.vcxproj.filters
 
+/clogging/clogging/stdafx.h
