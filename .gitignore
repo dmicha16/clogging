@@ -289,3 +289,12 @@ __pycache__/
 
 /clogging/clogging/test_log.txt
 /clogging/clogging/json.hpp
+/clogging/clogging.sln
+/clogging/clogging/stdafx.cpp
+/clogging/clogging/targetver.h
+
+# Project dependent stuff
+
+*.vcxproj
+*.vcxproj.filters
+

@@ -55,7 +55,6 @@ double Timer::TimerStart(std::string custom_timer) {
 	}
 
 	return 0;
-
 }
 
 double Timer::TimerEnd(std::string custom_timer) {
