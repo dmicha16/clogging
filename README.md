@@ -175,15 +175,51 @@ You have the option to either write into the Debug console, or write into Debug 
 ```c++
 [Sun Feb 18 20:48:44 2018] [EMERGENCY] hello world!
 ```
+# Timers
+You can use custom timers. As many as you'd want. Example usage:
+
+``` c++
+#include "Logger.h"
+
+CLOG_T("my_timer", Timer_t::START);
+// do things
+
+CLOG_T("my_timer", Timer_t::END);
+```
+Output looks like this and is outputted to timeroutput.log:
+
+``` c++
+[Sat Mar 10 12:34:44 2018] [my_timer] -> Duration: 10069.7
+```
+
+### Several timers
+Simple:
+``` c++
+#include "Logger.h"
+
+CLOG_T("my_timer", Timer_t::START);
+CLOG_T("my_timer1", Timer_t::START);
+// do things
+
+CLOG_T("my_timer", Timer_t::END);
+CLOG_T("my_timer1", Timer_t::END);
+```
+Output looks like this and is outputted to timeroutput.log:
+
+``` c++
+[Sat Mar 10 12:34:39 2018] [my_timer] -> Duration: 5057.74
+[Sat Mar 10 12:34:44 2018] [my_timer1] -> Duration: 10069.7
+```
+
 
 ### Todos
 
  - Custom verbosity levels
- - Timer
  - Custom time to keep the logs
  - Custom JSON object depth
- - VS OutputDebugString colors?
  - Conditional logging
+ - Config file
+ - Timer output custom location
 
 License
 ----

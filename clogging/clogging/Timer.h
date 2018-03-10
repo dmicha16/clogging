@@ -1,4 +1,5 @@
 #pragma once
+
 #include <time.h>
 #include <string>
 #include <string.h>
@@ -18,17 +19,23 @@
 
 typedef std::chrono::steady_clock::time_point timepoint_t;
 
+typedef enum {
+	TRUE = 0,
+	FALSE = 1,
+	NEUTRAL = 2
+} TriState;
+
 enum Timer_t {START, END};
 
 class Timer {
 
 private:
-	double TimerStart(std::string custom_timer);
+	TriState TimerStart(std::string custom_timer);
 	double TimerEnd(std::string custom_timer);	
 
 	std::map<std::string, timepoint_t> timer_map_;
 
-	void TimerOutput(double timer_duration, std::string timer_name);
+	void TimerOutput(double timer_duration, std::string timer_name, TriState timer_check);
 
 public:
 

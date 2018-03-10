@@ -29,19 +29,24 @@ std::string Timer::TimeStamp() {
 }
 
 void Timer::ClogT(std::string custom_timer, Timer_t time_param) {	
-
+	
+	TriState timer_check = FALSE;
+	double timer_duration;
+	
 	switch (time_param) {
 	case START:
-		TimerStart(custom_timer);
+		timer_check = TimerStart(custom_timer);
+		TimerOutput(0, custom_timer, timer_check);
+		timer_check = FALSE;
 		break;
 	case END:
-		double timer_duration = TimerEnd(custom_timer);
-		TimerOutput(timer_duration, custom_timer);
+		timer_duration = TimerEnd(custom_timer);
+		TimerOutput(timer_duration, custom_timer, timer_check);
 		break;
 	}
 }
 
-double Timer::TimerStart(std::string custom_timer) {
+TriState Timer::TimerStart(std::string custom_timer) {
 
 	timepoint_t timer_start = std::chrono::high_resolution_clock::now();
 
@@ -49,12 +54,14 @@ double Timer::TimerStart(std::string custom_timer) {
 		timer_map_.emplace(std::pair<std::string, timepoint_t>(custom_timer, timer_start));
 
 	}
+	else if (timer_map_.find(custom_timer) != timer_map_.end()) {
+		return TRUE;
+	}
 	else {
 		timer_map_.end();
 		timer_map_.emplace(std::pair<std::string, timepoint_t>(custom_timer, timer_start));
 	}
-
-	return 0;
+	return NEUTRAL;
 }
 
 double Timer::TimerEnd(std::string custom_timer) {
@@ -75,14 +82,17 @@ double Timer::TimerEnd(std::string custom_timer) {
 	}
 }
 
-void Timer::TimerOutput(double timer_duration, std::string timer_name) {
+void Timer::TimerOutput(double timer_duration, std::string timer_name, TriState timer_check) {
 
 	bool timer_exist = true;
-	std::string no_timer_exists;
-	if (timer_duration == 0) {
-		no_timer_exists = "The timer does not exists.";
+	std::string timer_exists_msg = "";
+	if (timer_duration == 0 && timer_check == FALSE) {
+		timer_exists_msg = "The timer does not exists.";
 		timer_exist = false;
 
+	}
+	else if (timer_check == TRUE) {
+		timer_exists_msg = "Same named timer is already counting.";
 	}
 
 	std::string current_time = TimeStamp();
@@ -91,7 +101,8 @@ void Timer::TimerOutput(double timer_duration, std::string timer_name) {
 
 	std::ofstream log_file_out("timeroutput.log", std::ofstream::app);
 
-	if (log_file_out.is_open() && timer_exist == true) {
+	if (log_file_out.is_open() && timer_exist == true && timer_exists_msg == ""
+		&& timer_check != NEUTRAL) {
 
 		log_file_out
 			<< "[" << current_time << "] "
@@ -105,7 +116,15 @@ void Timer::TimerOutput(double timer_duration, std::string timer_name) {
 		log_file_out
 			<< "[" << current_time << "] "
 			<< "[" << timer_name << "] -> "
-			<< no_timer_exists << std::endl;
+			<< timer_exists_msg << std::endl;
+		log_file_out.close();
+	}
+	else if (log_file_out.is_open() && timer_check ==  TRUE) {
+
+		log_file_out
+			<< "[" << current_time << "] "
+			<< "[" << timer_name << "] -> "
+			<< timer_exists_msg << std::endl;
 		log_file_out.close();
 	}
 

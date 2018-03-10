@@ -3,7 +3,7 @@
 
 // Uncomment any of these macros for more logging and debugging options.
 	// To use Windows.h and OutputDebugString in any Visual Studio version.
-#define CLOG_USE_VS 1 
+#define CLOG_USE_VS 1
 
 //------------
 
