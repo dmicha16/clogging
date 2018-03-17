@@ -30,14 +30,14 @@ std::string Timer::TimeStamp() {
 
 void Timer::ClogT(std::string custom_timer, Timer_t time_param) {	
 	
-	TriState timer_check = FALSE;
+	TriState timer_check = TRI_FALSE;
 	double timer_duration;
 	
 	switch (time_param) {
 	case START:
 		timer_check = TimerStart(custom_timer);
 		TimerOutput(0, custom_timer, timer_check);
-		timer_check = FALSE;
+		timer_check = TRI_FALSE;
 		break;
 	case END:
 		timer_duration = TimerEnd(custom_timer);
@@ -55,13 +55,13 @@ TriState Timer::TimerStart(std::string custom_timer) {
 
 	}
 	else if (timer_map_.find(custom_timer) != timer_map_.end()) {
-		return TRUE;
+		return TRI_TRUE;
 	}
 	else {
 		timer_map_.end();
 		timer_map_.emplace(std::pair<std::string, timepoint_t>(custom_timer, timer_start));
 	}
-	return NEUTRAL;
+	return TRI_NEUTRAL;
 }
 
 double Timer::TimerEnd(std::string custom_timer) {
@@ -86,12 +86,12 @@ void Timer::TimerOutput(double timer_duration, std::string timer_name, TriState 
 
 	bool timer_exist = true;
 	std::string timer_exists_msg = "";
-	if (timer_duration == 0 && timer_check == FALSE) {
+	if (timer_duration == 0 && timer_check == TRI_FALSE) {
 		timer_exists_msg = "The timer does not exists.";
 		timer_exist = false;
 
 	}
-	else if (timer_check == TRUE) {
+	else if (timer_check == TRI_TRUE) {
 		timer_exists_msg = "Same named timer is already counting.";
 	}
 
@@ -102,7 +102,7 @@ void Timer::TimerOutput(double timer_duration, std::string timer_name, TriState 
 	std::ofstream log_file_out("timeroutput.log", std::ofstream::app);
 
 	if (log_file_out.is_open() && timer_exist == true && timer_exists_msg == ""
-		&& timer_check != NEUTRAL) {
+		&& timer_check != TRI_NEUTRAL) {
 
 		log_file_out
 			<< "[" << current_time << "] "
@@ -119,7 +119,7 @@ void Timer::TimerOutput(double timer_duration, std::string timer_name, TriState 
 			<< timer_exists_msg << std::endl;
 		log_file_out.close();
 	}
-	else if (log_file_out.is_open() && timer_check ==  TRUE) {
+	else if (log_file_out.is_open() && timer_check ==  TRI_TRUE) {
 
 		log_file_out
 			<< "[" << current_time << "] "

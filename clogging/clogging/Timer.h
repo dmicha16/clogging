@@ -20,9 +20,9 @@
 typedef std::chrono::steady_clock::time_point timepoint_t;
 
 typedef enum {
-	TRUE = 0,
-	FALSE = 1,
-	NEUTRAL = 2
+	TRI_TRUE = 0,
+	TRI_FALSE = 1,
+	TRI_NEUTRAL = 2
 } TriState;
 
 enum Timer_t {START, END};
