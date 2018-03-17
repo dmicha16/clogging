@@ -37,6 +37,8 @@
 #define CLOG2(output_msg, level) Logger.Clog(output_msg, level)
 #define CLOG1(output_msg) Logger.Clog(output_msg)
 
+#define __FILENAME__ (strrchr(__FILE__, '\\') ? strrchr(__FILE__, '\\') + 1 : __FILE__)
+
 enum Output {DEFAULT, JSON, BOTH};
 enum Output_vs {DEBUG_ONLY, TO_FILE_JSON, TO_FILE_DEF, TO_FILE_BOTH};
 enum Verbosity {DEBUG, INFO, NOTICE, WARN, ERR, CRIT, ALERT, EMERG};
@@ -51,7 +53,9 @@ namespace clogging {
 		timepoint_t global_init_timestamp_;
 
 		void TXTSyntax(Verbosity level, std::string output_msg);
-		void JSONSyntax(Verbosity level, std::string output_msg);		
+		void JSONSyntax(Verbosity level, std::string output_msg);
+		void SystemInitOutput(std::string file_name, std::string path);
+		void SystemInitOutput(std::string file_name);
 		std::string EnumStringValue(Verbosity level);
 				
 	public:

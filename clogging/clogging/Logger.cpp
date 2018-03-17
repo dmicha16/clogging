@@ -20,6 +20,8 @@ namespace clogging {
 			log_file_create.open(file_name);
 			log_file_create.close();			
 		}
+		else
+			SystemInitOutput(file_name);
 		log_file.close();		
 	}
 
@@ -34,6 +36,8 @@ namespace clogging {
 			log_file_create.open(path);
 			log_file_create.close();
 		}
+		else
+			SystemInitOutput(file_name, path);
 		log_file.close();
 	}
 	
@@ -64,7 +68,47 @@ namespace clogging {
 	void Logger::Clog(std::string output_msg) {
 
 		TXTSyntax(Verbosity::DEBUG, output_msg);
-	}	
+	}
+
+	void Logger::SystemInitOutput(std::string file_name) {
+
+		std::ifstream log_file(global_file_name_);
+		log_file.close();
+
+		std::ofstream log_file_out(global_file_name_, std::ofstream::app);
+
+		if (log_file_out.is_open()) {
+
+			log_file_out
+				<< "[Logger started at: ]"
+				<< "[" << __TIMESTAMP__ "] "
+				<< "[" << __FILENAME__ << "] "
+				<< "[" << __threadid << "] "
+				<< std::endl
+				<< std::string(75, '-') << std::endl;
+			log_file_out.close();
+		}
+	}
+
+	void Logger::SystemInitOutput(std::string file_name, std::string path) {
+		
+		std::ifstream log_file(global_file_name_);
+		log_file.close();
+
+		std::ofstream log_file_out(global_file_name_, std::ofstream::app);
+
+		if (log_file_out.is_open()) {
+
+			log_file_out
+				<< "[Logger started at: ]"
+				<< "[" << __TIMESTAMP__ "] "
+				<< "[" << __FILENAME__ << "] "
+				<< "[" << __threadid << "] "
+				<< std::endl
+				<< std::string(75, '-') << std::endl;
+			log_file_out.close();
+		}
+	}
 	
 	void Logger::TXTSyntax(Verbosity level, std::string output_msg) {
 
