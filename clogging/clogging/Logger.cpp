@@ -67,7 +67,10 @@ namespace clogging {
 
 	void Logger::Clog(std::string output_msg) {
 
-		TXTSyntax(Verbosity::DEBUG, output_msg);
+		if (output_msg == "line" || output_msg == "LINE")
+			LineSyntax();
+		else
+			TXTSyntax(Verbosity::DEBUG, output_msg);
 	}
 
 	void Logger::SystemInitOutput(std::string file_name) {
@@ -78,14 +81,9 @@ namespace clogging {
 		std::ofstream log_file_out(global_file_name_, std::ofstream::app);
 
 		if (log_file_out.is_open()) {
-
+			std::stringstream output_format = SystemInitOutputFormat();
 			log_file_out
-				<< "[Logger started at: ]"
-				<< "[" << __TIMESTAMP__ "] "
-				<< "[" << __FILENAME__ << "] "
-				<< "[" << __threadid << "] "
-				<< std::endl
-				<< std::string(75, '-') << std::endl;
+				<< output_format.rdbuf();
 			log_file_out.close();
 		}
 	}
@@ -98,14 +96,45 @@ namespace clogging {
 		std::ofstream log_file_out(global_file_name_, std::ofstream::app);
 
 		if (log_file_out.is_open()) {
-
+			std::stringstream output_format = SystemInitOutputFormat();
 			log_file_out
-				<< "[Logger started at: ]"
-				<< "[" << __TIMESTAMP__ "] "
-				<< "[" << __FILENAME__ << "] "
-				<< "[" << __threadid << "] "
-				<< std::endl
-				<< std::string(75, '-') << std::endl;
+				<< output_format.rdbuf();
+				log_file_out.close();
+		}
+	}
+
+	std::stringstream Logger::SystemInitOutputFormat() {
+
+		std::stringstream output;
+		output
+			<< std::string(85, '-')
+			<< std::endl
+			<< std::string(85, ' ')
+			<< std::endl
+			<< "[Logger started at: ]"
+			<< "[" << __TIMESTAMP__ "] "
+			<< "[" << __FILENAME__ << "] "
+			<< "[" << __threadid << "] "
+			<< std::endl
+			<< std::string(85, ' ')
+			<< std::endl
+			<< std::string(85, '-') << std::endl;
+
+		return output;
+	}
+
+	void Logger::LineSyntax() {
+
+		std::ifstream log_file(global_file_name_);
+		log_file.close();
+
+		std::ofstream log_file_out(global_file_name_, std::ofstream::app);
+
+		if (log_file_out.is_open()) {
+
+			std::string line(85, '-');
+			log_file_out
+				<< line << std::endl;
 			log_file_out.close();
 		}
 	}
@@ -211,17 +240,24 @@ namespace clogging {
 
 		std::string current_time = TimerObj.TimeStamp();
 		double system_uptime = TimerObj.SystemUpMillis(global_init_timestamp_);
-
-		Verbosity level = Verbosity::DEBUG;
-		std::string level_value = EnumStringValue(level);		
-
 		std::stringstream debug_output;
-		debug_output
-			<< "[" << current_time << "] "
-			<< "[" << level_value << "] "
-			<< "[" << system_uptime << "] "
-			<< output_msg << std::endl;
 
+		std::string line(85, '-');
+
+		if (output_msg == "line" || output_msg == "LINE") {
+			debug_output
+				<< line << std::endl;
+		}
+		else {
+
+			Verbosity level = Verbosity::DEBUG;
+			std::string level_value = EnumStringValue(level);
+			debug_output
+				<< "[" << current_time << "] "
+				<< "[" << level_value << "] "
+				<< "[" << system_uptime << "] "
+				<< output_msg << std::endl;
+		}
 		OutputDebugStringA(debug_output.str().c_str());
 	}
 #endif // CLOG_USE_VS 1

@@ -52,10 +52,12 @@ namespace clogging {
 		std::string global_file_name_;
 		timepoint_t global_init_timestamp_;
 
+		void LineSyntax();
 		void TXTSyntax(Verbosity level, std::string output_msg);
 		void JSONSyntax(Verbosity level, std::string output_msg);
 		void SystemInitOutput(std::string file_name, std::string path);
 		void SystemInitOutput(std::string file_name);
+		std::stringstream SystemInitOutputFormat();
 		std::string EnumStringValue(Verbosity level);
 				
 	public:
