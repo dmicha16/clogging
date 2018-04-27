@@ -299,3 +299,4 @@ __pycache__/
 *.vcxproj.filters
 
 /clogging/clogging/stdafx.h
+clogging/clogging/clogging.csv

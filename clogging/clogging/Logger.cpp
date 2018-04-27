@@ -25,6 +25,26 @@ namespace clogging {
 		log_file.close();		
 	}
 
+	void Logger::AddFile(std::string file_name, std::string path, Extension file_extension) {
+
+		switch (file_extension) {
+		case CSV:
+			global_file_name_ = path + file_name + ".csv";
+			break;
+		}
+
+		std::ifstream log_file(file_name);
+
+		if (!log_file) {
+			std::ofstream log_file_create(path);
+			log_file_create.open(path);
+			log_file_create.close();
+		}
+		else
+			SystemInitOutput(file_name, path);
+		log_file.close();
+	}
+
 	void Logger::AddFile(std::string file_name, std::string path) {
 
 		global_file_name_ = path + file_name;
@@ -44,19 +64,22 @@ namespace clogging {
 	void Logger::Clog(std::string output_msg, Verbosity level, Output specify_type) {
 		
 		switch (specify_type) {
-			case 0:
-				TXTSyntax(level, output_msg);
-				break;
-			case 1:
-				JSONSyntax(level, output_msg);
-				break;
-			case 2:
-				TXTSyntax(level, output_msg);
-				JSONSyntax(level, output_msg);
-				break;
-			default:
-				TXTSyntax(level, output_msg);
-				break;
+		case Output::DEFAULT:
+			TXTSyntax(level, output_msg);
+			break;
+		case Output::JSON:
+			JSONSyntax(level, output_msg);
+			break;
+		case Output::BOTH:
+			TXTSyntax(level, output_msg);
+			JSONSyntax(level, output_msg);
+			break;
+		case Output::CSV:
+			CSVSyntax(level, output_msg);
+			break;
+		default:
+			TXTSyntax(level, output_msg);
+			break;
 		}
 	}
 
@@ -186,7 +209,30 @@ namespace clogging {
 			log_file_out << json_dump << "\n";
 			log_file_out.close();			
 		}
-	}	
+	}
+
+	void Logger::CSVSyntax(Verbosity level, std::string output_msg) {
+
+		std::string level_value = EnumStringValue(level);
+		std::string current_time = TimerObj.TimeStamp();
+		double system_uptime = TimerObj.SystemUpMillis(global_init_timestamp_);
+
+		std::ifstream log_file(global_file_name_);
+		log_file.close();
+
+		std::ofstream log_file_out(global_file_name_, std::ofstream::app);
+
+		if (log_file_out.is_open()) {
+
+			log_file_out
+				<< current_time << ", "
+				<< level_value << ", "
+				<< system_uptime << ", "
+				<< output_msg << std::endl;
+			log_file_out.close();
+		}
+	}
+
 
 #ifdef CLOG_USE_VS 1
 	void Logger::ClogVS(std::string output_msg, Verbosity level, Output_vs specify_type) {

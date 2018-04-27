@@ -29,7 +29,7 @@
 #define CLOG_VS2(output_msg, level) Logger.ClogVS(output_msg, level)
 #define CLOG_VS1(output_msg) Logger.ClogVS(output_msg)
 
-#define ADD_FILE3(file_name, path, future_param)
+#define ADD_FILE3(file_name, path, extension)
 #define ADD_FILE2(file_name, path) Logger.AddFile(file_name, path)
 #define ADD_FILE1(file_name) Logger.AddFile(file_name)
 
@@ -39,9 +39,10 @@
 
 #define __FILENAME__ (strrchr(__FILE__, '\\') ? strrchr(__FILE__, '\\') + 1 : __FILE__)
 
-enum Output {DEFAULT, JSON, BOTH};
+enum Output {DEFAULT, JSON, BOTH, CSV};
 enum Output_vs {DEBUG_ONLY, TO_FILE_JSON, TO_FILE_DEF, TO_FILE_BOTH};
 enum Verbosity {DEBUG, INFO, NOTICE, WARN, ERR, CRIT, ALERT, EMERG};
+enum Extension {E_CSV};
 
 namespace clogging {	
 	
@@ -55,6 +56,7 @@ namespace clogging {
 		void LineSyntax();
 		void TXTSyntax(Verbosity level, std::string output_msg);
 		void JSONSyntax(Verbosity level, std::string output_msg);
+		void CSVSyntax(Verbosity level, std::string output_msg);
 		void SystemInitOutput(std::string file_name, std::string path);
 		void SystemInitOutput(std::string file_name);
 		std::stringstream SystemInitOutputFormat();
@@ -62,6 +64,7 @@ namespace clogging {
 				
 	public:
 
+		void AddFile(std::string file_name, std::string path, Extension file_extension);
 		void AddFile(std::string file_name, std::string path);
 		void AddFile(std::string file_name);
 
