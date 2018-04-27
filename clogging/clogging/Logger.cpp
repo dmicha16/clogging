@@ -21,7 +21,7 @@ namespace clogging {
 			log_file_create.close();			
 		}
 		else
-			SystemInitOutput(file_name);
+			//SystemInitOutput(file_name);
 		log_file.close();		
 	}
 
@@ -41,7 +41,7 @@ namespace clogging {
 			log_file_create.close();
 		}
 		else
-			SystemInitOutput(file_name, path);
+			//SystemInitOutput(file_name, path);
 		log_file.close();
 	}
 
@@ -76,6 +76,9 @@ namespace clogging {
 			break;
 		case Output::CSV:
 			CSVSyntax(level, output_msg);
+			break;
+		case Output::CSV_A:
+			CSVSyntaxAppend(level, output_msg);
 			break;
 		default:
 			TXTSyntax(level, output_msg);
@@ -220,15 +223,33 @@ namespace clogging {
 		std::ifstream log_file(global_file_name_);
 		log_file.close();
 
-		std::ofstream log_file_out(global_file_name_, std::ofstream::app);
+		std::ofstream log_file_out(global_file_name_, std::ofstream::app);	
 
 		if (log_file_out.is_open()) {
 
 			log_file_out
-				<< current_time << ", "
+				<< "\n" << current_time << ", "
 				<< level_value << ", "
 				<< system_uptime << ", "
-				<< output_msg << std::endl;
+				<< output_msg;
+			log_file_out.close();
+		}
+	}
+
+	void Logger::CSVSyntaxAppend(Verbosity level, const std::string output_msg) {
+
+		std::string level_value = EnumStringValue(level);
+		std::string current_time = TimerObj.TimeStamp();
+		double system_uptime = TimerObj.SystemUpMillis(global_init_timestamp_);
+
+		std::ifstream log_file(global_file_name_);
+		log_file.close();
+
+		std::ofstream log_file_out(global_file_name_, std::ofstream::app);
+
+		if (log_file_out.is_open()) {
+			log_file_out
+				<< " ," << output_msg;
 			log_file_out.close();
 		}
 	}

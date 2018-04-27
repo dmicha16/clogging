@@ -39,7 +39,7 @@
 
 #define __FILENAME__ (strrchr(__FILE__, '\\') ? strrchr(__FILE__, '\\') + 1 : __FILE__)
 
-enum Output {DEFAULT, JSON, BOTH, CSV};
+enum Output {DEFAULT, JSON, BOTH, CSV, CSV_A};
 enum Output_vs {DEBUG_ONLY, TO_FILE_JSON, TO_FILE_DEF, TO_FILE_BOTH};
 enum Verbosity {DEBUG, INFO, NOTICE, WARN, ERR, CRIT, ALERT, EMERG};
 enum Extension {E_CSV};
@@ -57,6 +57,7 @@ namespace clogging {
 		void TXTSyntax(Verbosity level, std::string output_msg);
 		void JSONSyntax(Verbosity level, std::string output_msg);
 		void CSVSyntax(Verbosity level, std::string output_msg);
+		void CSVSyntaxAppend(Verbosity level, const std::string output_msg);
 		void SystemInitOutput(std::string file_name, std::string path);
 		void SystemInitOutput(std::string file_name);
 		std::stringstream SystemInitOutputFormat();
